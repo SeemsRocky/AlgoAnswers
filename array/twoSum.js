@@ -5,7 +5,8 @@
  */
 const twoSum = function(nums, target) {
   const cache = {};
-  for(const num of nums){
-    cache[num] = cache[num]===undefined ? [target-num,false] : [target-num,true];
+  for(const i in nums){
+    if(cache[target-nums[i]]) return [cache[target-nums[i]],i];
+    if(cache[nums[i]]===undefined) cache[nums[i]]=i;
   }
 };
