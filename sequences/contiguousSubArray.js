@@ -9,3 +9,20 @@ const maxSubArray = function(nums){
   }
   return maxSum;
 }
+const maxSubArray = function(nums){
+  let maxSum = -Infinity;
+  let currSum = -Infinity;
+  for(let val of nums){
+    currSum += val;
+    if(val > currSum){
+      currSum = val;
+    }
+    if(currSum > maxSum){
+      maxSum = currSum;
+    }
+    if(val>currSum){
+      currSum = 0;
+    }
+  }
+  return maxSum;
+}
