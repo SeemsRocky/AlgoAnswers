@@ -9,7 +9,7 @@ const maxSubArray = function(nums){
   }
   return maxSum;
 }
-const maxSubArray = function(nums){
+const linearMaxSubArray = function(nums){
   let maxSum = -Infinity;
   let currSum = -Infinity;
   for(let val of nums){
