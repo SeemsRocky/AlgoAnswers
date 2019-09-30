@@ -1,3 +1,9 @@
+/** 
+ * @param {number[]} nums
+ * output: maxSum
+*/
+
+// time O(n^2) space O(1) b/c only used primitive values
 const maxSubArray = function(nums){
   let maxSum = -Infinity;
   for(let i = 0; i < nums.length; i += 1){
@@ -9,6 +15,8 @@ const maxSubArray = function(nums){
   }
   return maxSum;
 }
+// time O(n) space 0(1)
+// so reset currsum whenever the curr number is bigger than the curr sum 
 const linearMaxSubArray = function(nums){
   let maxSum = -Infinity;
   let currSum = -Infinity;
