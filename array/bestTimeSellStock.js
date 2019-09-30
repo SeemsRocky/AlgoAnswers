@@ -26,4 +26,16 @@ console.log(bruteMaxProfit([7,5,3,2,1]))
 
 var linearMaxProfit = function(prices){
   let maxProfit = 0;
+  let min = prices[0];
+  let max = prices[0];
+  for(let i = 1; i < prices.length; i += 1){
+    if(prices[i]<=min){
+      maxProfit = max-min > maxProfit ? max-min : maxProfit;
+      min = prices[i];
+    }
+    max = prices[i];
+  }
+  return maxProfit;
 }
+console.log(linearMaxProfit(([7,6,5,4,3,2,1])))
+console.log(linearMaxProfit(([7,5,3,6,1,2,1])))
