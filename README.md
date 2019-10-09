@@ -5,6 +5,7 @@
 - [x] Contain duplicates
 - [x] Remove duplicates in sorted array
 - [x] Two sum
+- [x] Merge Sorted Arrays in Place
 
 ## Linked Lists
 -----
