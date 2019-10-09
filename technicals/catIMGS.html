@@ -1,0 +1,219 @@
+<!--
+
+Please create a small React app that allows you to view images of cats using The Cat API (link below). Five cat images should load on start, and then provide buttons to view next or previous 5 cat images. Only 5 cat images should show at any given time. The previous button should only work if new cat images have loaded. Use CSS to ensure the app is pleasing to the eye. 
+
+BONUS: Add search & filtering to get more specific images. See the documentation for how to get data to filter on, such as categories and breeds.
+
+Please do not use any CSS libraries. We want to see what you can write :)
+
+Time: There is no cut-off time limit for this challenge, but we suggest that you complete all the base objectives within 2 hours. Feel free to spend extra time to polish your solution.
+
+---
+
+API: https://thecatapi.com/
+API Key: d9337a43-01d9-4a6a-85fa-295562e9d91f 
+
+An API Key is required to request more than 1 image at a time. You can use the API Key above or signup with your email to get your own personal API key (or if the above no longer works).
+
+-->
+
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Cat Images</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.2.0/umd/react.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.2.0/umd/react-dom.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js"></script>
+    <style>
+      html {
+        background: #fff;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+      }
+      h2{
+        margin-top:10px;
+        text-align:center;
+        font-size:36px;
+      }
+      article {
+        display:grid;
+        grid-template-columns: 33% 33% 33%;
+        grid-template-rows: 300px;
+        justify-items:center;
+        align-items:center;
+      }
+      .cats {
+        height:200px;
+        width:200px;   
+      }
+      #btnContainer{
+        text-align:center; 
+        margin-top:25px;
+      }
+      button{
+        width:75px;
+      }
+      form{
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        border:1px solid red;
+        padding:5px;
+      }
+      form > button, form > section {
+        margin:10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/jsx">
+      
+      class App extends React.Component {
+        constructor(props) {
+          super(props);
+
+          this.state = {
+            currentIndex: 0,
+            isLoaded:false,
+            images: [],
+            breeds: {},
+            categories: {},
+            currentCategoryId:'',
+            currentBreed: '',
+          };
+          
+          this.fetchImages = this.fetchImages.bind(this);
+          this.fetchPreviousImages = this.fetchPreviousImages.bind(this);
+          this.fetchCategories = this.fetchCategories.bind(this);
+          this.fetchBreeds = this.fetchBreeds.bind(this);
+          this.updateCategory = this.updateCategory.bind(this);
+          this.updateBreed = this.updateBreed.bind(this);
+        }
+        
+        componentDidMount(){
+          this.fetchImages(event);
+          this.fetchCategories();
+          this.fetchBreeds();
+        }
+
+        componentDidUpdate(){
+          if(this.state.isLoaded){
+            document.getElementById("prevBtn").disabled = false;
+          }    
+        }
+        
+        fetchCategories(){
+          fetch('https://api.thecatapi.com/v1/categories')
+          .then(res => res.json())
+          .then(jsonObj => { 
+            const categories = {};
+            for(const {name,id} of jsonObj){
+              categories[name] = id;
+            }
+            this.setState({categories});
+          })
+        }
+        fetchBreeds(){
+          fetch('https://api.thecatapi.com/v1/breeds')
+          .then(res => res.json())
+          .then(jsonObj => { 
+            const breeds = {};
+            for(const {name,id} of jsonObj){
+              breeds[name] = id;
+            }
+            this.setState({breeds});
+          }) 
+        } 
+        fetchPreviousImages(){
+          const {currentIndex} = this.state;
+          
+          if(currentIndex>0) this.setState({currentIndex:currentIndex-5});
+        }
+        
+        fetchImages(e) {
+          e.preventDefault();
+          // fetch images function
+          let {currentIndex, images, currentCategoryId, currentBreed} = this.state;
+          const myHeaders = {'x-api-key':'d9337a43-01d9-4a6a-85fa-295562e9d91f'};
+          
+          let url = 'https://api.thecatapi.com/v1/images/search?limit=5';
+          if(currentCategoryId) url += `&category_ids=${currentCategoryId}`;
+          if(currentBreed) url += `&breed_ids=${currentBreed}`;
+          
+          if(images.length===0 || currentIndex+5 === images.length){
+            document.getElementById("prevBtn").disabled = true;
+            
+            fetch(url,{method:'GET',headers:myHeaders})
+            .then(res=>res.json())
+            .then(jsonObj=>{
+              if(images.length>0) currentIndex+=5;
+              
+              images = images.concat(jsonObj.map(details => details.url));
+              this.setState({images,currentIndex,isLoaded:true});
+            })
+            
+          } else {
+            this.setState({currentIndex:currentIndex+5});
+          }
+          
+        }
+        updateCategory(e){
+          this.setState({currentCategoryId:e.currentTarget.value});
+        }
+        updateBreed = (e) => {
+          this.setState({currentBreed:e.currentTarget.value});
+        };
+
+        
+
+        render() {
+          const { images,currentIndex,categories,breeds } = this.state;
+          const catImgs = [];
+          for(let i = currentIndex; i < currentIndex+5; i += 1){
+            catImgs.push(<img className = 'cats' src={images[i]} />);
+          }
+          const categoryOptions = Object.keys(categories).map(name => <option value={categories[name]}>{name} </option> );
+          const breedOptions = Object.keys(breeds).map(name => <option value={breeds[name]}>{name} </option> );                                 
+        
+          return (
+            <div id='mainCointainer'>
+              <h2 id='title'> Rocky's Cat Gallery </h2>
+              <div id='formContainer'>
+                <form onSubmit={(e)=> this.fetchImages(e)}>
+                  <section>
+                    <label htmlFor='breed'>Breed</label>
+                    <select id='breed' onChange={(e)=>this.updateBreed(e)}>
+                      <option value=''> </option>
+                      {breedOptions}
+                    </select>
+                  </section>
+                  <section>
+                    <label htmlFor='category'>Category</label>
+                    <select id='category' onChange={(e)=>this.updateCategory(e)}>
+                      <option value=''> </option>
+                      {categoryOptions}
+                    </select>
+                  </section>
+                  <button type='submit'> Submit </button>
+                </form> 
+              </div>
+              <article>
+                {catImgs}
+              </article>
+              <div id='btnContainer'> 
+                <button type='button' id='prevBtn' onClick={this.fetchPreviousImages}>Previous</button>
+                <button type='button' id='nextBtn' onClick={(e)=>this.fetchImages(e)}>Next</button>
+              </div>
+            </div>
+          );
+        }
+      };
+
+      ReactDOM.render(
+        <App />,
+        document.getElementById('root')
+      );
+    </script>
+  </body>
+</html>
