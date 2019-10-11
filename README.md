@@ -22,3 +22,6 @@
 - [x] First Unique Character
 - [x] Reverse Number
 - [x] Reverse String
+
+## Math
+- [x] Fizz Buzz
