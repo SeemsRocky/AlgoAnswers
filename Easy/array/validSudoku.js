@@ -11,7 +11,6 @@ var isValidSudoku = function(board) {
   function checkConstraint(constraint,constraintIndex,currentNum) {
       if(constraint.hasOwnProperty(constraintIndex)){
           if(constraint[constraintIndex][currentNum]){
-              console.log(constraint,constraintIndex,currentNum)
               isValid = false    
           }
       } else {
