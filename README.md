@@ -31,6 +31,7 @@
 - [x] First Unique Character
 - [x] Reverse Number
 - [x] Reverse String
+- [x] Valid Anagram
 
 ## Math
 - [x] Fizz Buzz
