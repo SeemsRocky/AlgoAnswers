@@ -15,4 +15,7 @@ var isAnagram = function(s, t) {
   }
   return true;
 };
- 
+
+var isAnagramOneLiner = function(s,t) {
+  return s.split('').sort().join('')===t.split('').sort().join('');
+}
