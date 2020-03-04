@@ -4,16 +4,20 @@
 ----- 
 - [x] Best time to sell stock
 - [x] Contain duplicates
-- [x] Remove duplicates in sorted array
-- [x] Two sum
 - [x] Merge Sorted Arrays in Place
+- [x] Move Zeroes
+- [x] Plus One
+- [x] Remove duplicates in sorted array
+- [x] Rotate Array
 - [x] Rotate Image
+- [x] Two sum
+- [x] Valid Sudoku
 
 ## Linked Lists
 -----
-- [x] Remove Nth to Last Node
 - [x] Delete Node in a Linked List
 - [x] Merge Sorted Lists
+- [x] Remove Nth to Last Node
 - [x] Reverse Linked List
 
 ## Sequences
